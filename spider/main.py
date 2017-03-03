@@ -43,12 +43,13 @@ class videoSpider(object):
                         print 'url地址有问题:', videos_info_url
                         continue
                     print '地址：',i,videos_info_url
-                    videos_info_detail['url'] = videos_info_url
+                    videos_info_detail['url'] = video
                     videos_infos.append(videos_info_detail)
                 print 'craw video:', videos_info_url,i
                 i=i+1
             self.save_data.savefile2(videos_infos)
             self.savedb.insertDB(videos_infos)
+            page_i += 1
 
 
     def craw(self, base_url):
@@ -74,5 +75,5 @@ db = saveToDB.ConnMysql()
 # db.insertDB([movie_info])
 # save.savefile2([movie_info])
 base_url = 'http://list.youku.com/category/show'
-pre_url = '/c_97'
+pre_url = '/c_96'
 spider.getVideoInfo(base_url, pre_url)

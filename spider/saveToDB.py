@@ -22,20 +22,20 @@ class ConnMysql:
         try:
             for video in video_info:
                 para = [video['url'],
-                    video['leibie'],
-                    video['电影'],
-                    video['别名'],
-                    video['上映'],
-                    video['优酷上映'],
-                    video['评分'],
-                    video['主演'],
-                    video['导演'],
-                    video['地区'],
-                    video['类型'],
-                    video['总播放数'],
-                    video['评论'],
-                    video['顶'],
-                    video['简介'] ]
+                        video['leibie'],
+                        video['电影'],
+                        video['别名'],
+                        video['上映'],
+                        video['优酷上映'],
+                        video['评分'],
+                        video['主演'],
+                        video['导演'],
+                        video['地区'],
+                        video['类型'],
+                        video['总播放数'],
+                        video['评论'],
+                        video['顶'],
+                        video['简介'] ]
                 cur.execute(sql, para)
             cout = cur.execute('SELECT * FROM %s' % t_name)
             conn.commit()
