@@ -2,7 +2,6 @@
 
 from bs4 import BeautifulSoup
 import re
-import uniout
 
 class HtmlParaser(object):
 
@@ -28,6 +27,19 @@ class HtmlParaser(object):
         except Exception as e:
             return None
         return video_links
+
+    def get_first_info(self,type_htmls):
+        soup = BeautifulSoup(type_htmls,'lxml')
+        try:
+            div_tags=soup.find_all('div', class_='base_info')
+            h1_tags = div_tags[0].find_all('h1', class_='title')
+            a_tags = h1_tags[0].find_all('a')
+            first_info = a_tags[0].getText()
+            info = first_info[1:len(first_info)-1]
+            return info
+
+        except Exception as e:
+            return None
 
     def get_video_info_url(self,type_htmls):
         soup = BeautifulSoup(type_htmls, 'lxml')
@@ -56,7 +68,7 @@ class HtmlParaser(object):
 
 
     def get_movie_info(self,soup):
-        i=5
+        i = 5
         try:
             movie_msg = soup.find(name='div',attrs={'class': 'p-base'})
             tag_li = movie_msg.find_all(name='li')
@@ -77,7 +89,7 @@ class HtmlParaser(object):
                 movie_info['上映'] = shangying[1].strip()
                 flags += 1
             else:
-                movie_info['上映'] ='未知\t'
+                movie_info['上映'] ='未知'
                 #print '优酷出品'
 
             youku_time=tag_li[flags].getText().split('：')
@@ -85,7 +97,7 @@ class HtmlParaser(object):
             flags += 1
 
             pingfen=tag_li[flags].getText().split('：')
-            movie_info['评分'] = pingfen[1].strip()
+            movie_info['评分'] = pingfen[1].strip()[0:3]
             flags += 1
 
             zhuyan = tag_li[flags+i].getText().split('：')
@@ -116,8 +128,8 @@ class HtmlParaser(object):
             movie_info['顶'] = ding[1].strip()
             flags += 1
 
-            jianjie = tag_li[flags+i+1].getText().split('：')
-            movie_info['简介'] = jianjie[1].strip()
+            # jianjie = tag_li[flags+i+1].getText().split('：')
+            # movie_info['简介'] = jianjie[1].strip()[0:len(jianjie[1].strip())-2]
 
             return movie_info
         except:
@@ -145,7 +157,7 @@ class HtmlParaser(object):
                 movie_info['上映'] = shangying[1].strip()
                 flags += 1
             else:
-                movie_info['上映'] = '未知\t'
+                movie_info['上映'] = '未知'
                 #print '优酷出品'
 
             youku_time = tag_li[flags].getText().split('：')
@@ -184,8 +196,8 @@ class HtmlParaser(object):
             movie_info['顶'] = ding[1].strip()
             flags += 1
 
-            jianjie = tag_li[flags+1].getText().split('：')
-            movie_info['简介'] = jianjie[1].strip()
+            # jianjie = tag_li[flags+1].getText().split('：')
+            # movie_info['简介'] = jianjie[1].strip()
 
             return movie_info
         except:
@@ -237,22 +249,20 @@ class HtmlParaser(object):
             movie_info['顶'] = ding[1].strip()
             flags += 1
 
-            jianjie = tag_li[flags + 1].getText().split('：')
-            movie_info['简介'] = jianjie[1].strip()
+            # jianjie = tag_li[flags + 1].getText().split('：')
+            # movie_info['简介'] = jianjie[1].strip()
 
-            bieming = tag_li[flags].getText().split('：')
-            movie_info['别名'] = bieming[1].strip()
-            flags += 1
+            # bieming = tag_li[flags].getText().split('：')
+            # movie_info['别名'] = bieming[1].strip()
+            # flags += 1
 
-            movie_info['上映'] = '未知\t'
-
-            movie_info['优酷上映'] = '未知\t'
-
-            movie_info['主演'] = '未知\t'
-
-            movie_info['导演'] = '未知\t'
-
-            # print movie_info
+            # movie_info['上映'] = '未知\t'
+            #
+            # movie_info['优酷上映'] = '未知\t'
+            #
+            # movie_info['主演'] = '未知\t'
+            #
+            # movie_info['导演'] = '未知\t'
             return movie_info
         except:
             return None
@@ -260,11 +270,12 @@ class HtmlParaser(object):
 
 
 
-    def get_beautiful_soup(self,html):
+    def get_beautiful_soup(self,html, type):
         soup = BeautifulSoup(html, 'lxml')
-        video_info = self.get_movie_info(soup)
-        if video_info == None:
+        if '电影' in type :
+            video_info = self.get_movie_info(soup)
+        if '剧集' in type :
             video_info = self.get_tv_info(soup)
-        if video_info ==None:
+        if '综艺' in type :
             video_info = self.get_zongyi_info(soup)
         return video_info

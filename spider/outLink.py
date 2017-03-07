@@ -4,4 +4,4 @@ from bs4 import BeautifulSoup
 class outLink:
 
     def selfout(self):
-        print "hahh"
+        print 'hello'

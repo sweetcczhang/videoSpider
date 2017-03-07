@@ -1,6 +1,5 @@
 #!/usr/bin/python2.7
 # coding=utf-8
-import uniout
 from bs4 import BeautifulSoup
 import re
 import sys
